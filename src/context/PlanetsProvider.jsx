@@ -10,6 +10,9 @@ function PlanetsProvider({ children }) {
   const [filterName, setfilterName] = useState({
     input: '',
   });
+  const [column, setColumn] = useState('population');
+  const [comparison, setComparison] = useState('maior que');
+  const [amount, setAmount] = useState('0');
 
   // Atualizando o estado
   const getPlanets = async () => {
@@ -29,11 +32,36 @@ function PlanetsProvider({ children }) {
     });
   };
 
+  // O objetivo do função abaixo é filtrar os resultados da tabela
+  // Ela utiliza a variável "comparison" para determinar qual tipo de filtro deve ser aplicado
+  const handleSelectedFilter = () => {
+    const filteredPlanets = planets.filter((planet) => {
+      switch (comparison) {
+      case 'maior que':
+        return parseInt(planet[column], 10) > parseInt(amount, 10);
+      case 'menor que':
+        return parseInt(planet[column], 10) < parseInt(amount, 10);
+      case 'igual a':
+        return parseInt(planet[column], 10) === parseInt(amount, 10);
+      default:
+        return false;
+      }
+    });
+    setPlanets(filteredPlanets);
+  };
+
   // Definindo os dados que serão compartilhados para os componentes
   const value = {
     planets,
     handleChange,
     filterName,
+    column,
+    comparison,
+    amount,
+    setColumn,
+    setComparison,
+    setAmount,
+    handleSelectedFilter,
   };
 
   // Com esse retorno todos os componentes encapsulados pelo PlanetsContext.Provider terão acesso a esses dados

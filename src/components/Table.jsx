@@ -4,10 +4,71 @@ import PlanetsContext from '../context/planetsContext';
 
 function Table() {
   // Consumindo os dados de um Context usando o Hook useContext
-  const { planets, handleChange, filterName } = useContext(PlanetsContext);
+  const {
+    planets,
+    handleChange,
+    filterName,
+    column,
+    setColumn,
+    comparison,
+    setComparison,
+    amount,
+    setAmount,
+    handleSelectedFilter,
+  } = useContext(PlanetsContext);
+
+  // Convertendo o valor de entrada para minúsculas uma vez e armazenando em uma variável
   const filterNameInput = filterName.input.toLowerCase();
   return (
     <div>
+
+      <label htmlFor="column">
+        Table column:
+        <select
+          id="column"
+          name="column"
+          value={ column }
+          data-testid="column-filter"
+          onChange={ ({ target }) => setColumn(target.value) }
+        >
+          <option value="population">population</option>
+          <option value="orbital_period">orbital_period</option>
+          <option value="diameter">diameter</option>
+          <option value="rotation_period">rotation_period</option>
+          <option value="surface_water">surface_water</option>
+        </select>
+      </label>
+
+      <label htmlFor="comparison">
+        Comparison:
+        <select
+          id="comparison"
+          name="comparison"
+          value={ comparison }
+          data-testid="comparison-filter"
+          onChange={ ({ target }) => setComparison(target.value) }
+        >
+          <option value="maior que">maior que</option>
+          <option value="igual a">igual a</option>
+          <option value="menor que">menor que</option>
+        </select>
+      </label>
+
+      <input
+        type="number"
+        data-testid="value-filter"
+        value={ amount }
+        onChange={ ({ target }) => setAmount(target.value) }
+      />
+
+      <button
+        type="button"
+        data-testid="button-filter"
+        onClick={ handleSelectedFilter }
+      >
+        Filter
+      </button>
+
       <input
         type="text"
         placeholder="Search a planet from the Star Wars universe"
