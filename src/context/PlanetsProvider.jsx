@@ -7,6 +7,9 @@ import PlanetsContext from './planetsContext';
 function PlanetsProvider({ children }) {
   // useState permite que utilize o estado do React em componentes funcionais
   const [planets, setPlanets] = useState([]);
+  const [filterName, setfilterName] = useState({
+    input: '',
+  });
 
   // Atualizando o estado
   const getPlanets = async () => {
@@ -19,9 +22,18 @@ function PlanetsProvider({ children }) {
     getPlanets();
   }, []);
 
+  // handleChange está atualizando o valor do estado de maneira que seja o mesmo que está sendo digitado no input
+  const handleChange = ({ target: { value } }) => {
+    setfilterName({
+      input: value,
+    });
+  };
+
   // Definindo os dados que serão compartilhados para os componentes
   const value = {
     planets,
+    handleChange,
+    filterName,
   };
 
   // Com esse retorno todos os componentes encapsulados pelo PlanetsContext.Provider terão acesso a esses dados
