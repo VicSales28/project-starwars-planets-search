@@ -4,6 +4,14 @@ import PropTypes from 'prop-types';
 import fetchPlanets from '../helpers/fetchFunctions';
 import PlanetsContext from './planetsContext';
 
+const alternatives = [
+  'population',
+  'orbital_period',
+  'diameter',
+  'rotation_period',
+  'surface_water',
+];
+
 function PlanetsProvider({ children }) {
   // useState permite que utilize o estado do React em componentes funcionais
   const [planets, setPlanets] = useState([]);
@@ -13,6 +21,7 @@ function PlanetsProvider({ children }) {
   const [column, setColumn] = useState('population');
   const [comparison, setComparison] = useState('maior que');
   const [amount, setAmount] = useState('0');
+  const [options, setOptions] = useState(alternatives);
 
   // Atualizando o estado
   const getPlanets = async () => {
@@ -32,9 +41,15 @@ function PlanetsProvider({ children }) {
     });
   };
 
-  // O objetivo do função abaixo é filtrar os resultados da tabela
-  // Ela utiliza a variável "comparison" para determinar qual tipo de filtro deve ser aplicado
   const handleSelectedFilter = () => {
+    // Esse código é usado para filtrar um array de opções com base na coluna selecionada pelo usuário.
+    // O objetivo é remover a opção atual da lista de opções disponíveis.
+    const newOptions = options.filter((option) => option !== column);
+    setColumn(newOptions[0]);
+    setOptions(newOptions);
+
+    // O objetivo do código abaixo é filtrar os resultados da tabela
+    // Ela utiliza a variável "comparison" para determinar qual tipo de filtro deve ser aplicado
     const filteredPlanets = planets.filter((planet) => {
       switch (comparison) {
       case 'maior que':
@@ -62,6 +77,7 @@ function PlanetsProvider({ children }) {
     setComparison,
     setAmount,
     handleSelectedFilter,
+    options,
   };
 
   // Com esse retorno todos os componentes encapsulados pelo PlanetsContext.Provider terão acesso a esses dados
