@@ -18,6 +18,7 @@ function Table() {
     options,
     filter,
     handleRemovingAllFilters,
+    removeSelectedFilter,
   } = useContext(PlanetsContext);
 
   // Convertendo o valor de entrada para minúsculas uma vez e armazenando em uma variável
@@ -92,7 +93,9 @@ function Table() {
         acc.push(
           <div data-testid="filter" key={ acc.length }>
             <span>{`${curr.column} ${curr.comparison} ${curr.amount}`}</span>
-            <button type="button">x</button>
+            <button type="button" onClick={ () => removeSelectedFilter(curr.column) }>
+              x
+            </button>
           </div>,
         );
         return acc;

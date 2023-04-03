@@ -15,6 +15,7 @@ const alternatives = [
 function PlanetsProvider({ children }) {
   // useState permite que utilize o estado do React em componentes funcionais
   const [planets, setPlanets] = useState([]);
+  const [allPlanets, setAllPlanets] = useState([]);
   const [filterName, setfilterName] = useState({
     input: '',
   });
@@ -28,6 +29,7 @@ function PlanetsProvider({ children }) {
   const getPlanets = async () => {
     const data = await fetchPlanets('https://swapi.dev/api/planets');
     setPlanets(data.results);
+    setAllPlanets(data.results);
   };
 
   // A callback será executada similarmente ao componentDidMount, ou seja, rodando apenas uma vez
@@ -78,6 +80,35 @@ function PlanetsProvider({ children }) {
     setFilter([]);
   };
 
+  const removeSelectedFilter = (selectedFilter) => {
+    const index = alternatives.indexOf(selectedFilter);
+    options.splice(index, 0, selectedFilter);
+
+    const newFilters = filter.filter((element) => element.column !== selectedFilter);
+    setFilter(newFilters);
+    setOptions(options);
+    setColumn(options[0]);
+
+    let filteredPlanets = allPlanets;
+
+    newFilters.forEach((e) => {
+      filteredPlanets = filteredPlanets.filter((planet) => {
+        switch (comparison) {
+        case 'maior que':
+          return parseInt(planet[e.column], 10) > parseInt(e.amount, 10);
+        case 'menor que':
+          return parseInt(planet[e.column], 10) < parseInt(e.amount, 10);
+        case 'igual a':
+          return parseInt(planet[e.column], 10) === parseInt(e.amount, 10);
+        default:
+          return false;
+        }
+      });
+    });
+
+    setPlanets(filteredPlanets);
+  };
+
   // Definindo os dados que serão compartilhados para os componentes
   const value = {
     planets,
@@ -93,6 +124,7 @@ function PlanetsProvider({ children }) {
     options,
     filter,
     handleRemovingAllFilters,
+    removeSelectedFilter,
   };
 
   // Com esse retorno todos os componentes encapsulados pelo PlanetsContext.Provider terão acesso a esses dados
