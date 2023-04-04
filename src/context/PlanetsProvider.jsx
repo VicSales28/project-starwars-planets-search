@@ -23,7 +23,7 @@ function PlanetsProvider({ children }) {
   const [comparison, setComparison] = useState('maior que');
   const [amount, setAmount] = useState('0');
   const [options, setOptions] = useState(alternatives);
-  const [filter, setFilter] = useState([]);
+  const [filters, setFilters] = useState([]);
 
   // Atualizando o estado
   const getPlanets = async () => {
@@ -53,7 +53,7 @@ function PlanetsProvider({ children }) {
 
     // Esse código é usado para incrementar um array de objetos com as opções de filtro selecionadas pelo usuário.
     // Seu objetivo é armazenar todos os filtros utilizados durante a navegação.
-    setFilter([...filter, { column, comparison, amount }]);
+    setFilters([...filters, { column, comparison, amount }]);
 
     // O objetivo do código abaixo é filtrar os resultados da tabela
     // Ela utiliza a variável "comparison" para determinar qual tipo de filtro deve ser aplicado
@@ -72,20 +72,20 @@ function PlanetsProvider({ children }) {
     setPlanets(filteredPlanets);
   };
 
-  const handleRemovingAllFilters = async () => {
+  const removeAllFilters = async () => {
     await getPlanets();
     setColumn('population');
     setAmount('0');
     setOptions(alternatives);
-    setFilter([]);
+    setFilters([]);
   };
 
   const removeSelectedFilter = (selectedFilter) => {
     const index = alternatives.indexOf(selectedFilter);
     options.splice(index, 0, selectedFilter);
 
-    const newFilters = filter.filter((element) => element.column !== selectedFilter);
-    setFilter(newFilters);
+    const newFilters = filters.filter((element) => element.column !== selectedFilter);
+    setFilters(newFilters);
 
     if (newFilters.length === 0) {
       setColumn('population');
@@ -142,8 +142,8 @@ function PlanetsProvider({ children }) {
     setAmount,
     handleSelectedFilter,
     options,
-    filter,
-    handleRemovingAllFilters,
+    filters,
+    removeAllFilters,
     removeSelectedFilter,
   };
 

@@ -16,8 +16,8 @@ function Table() {
     setAmount,
     handleSelectedFilter,
     options,
-    filter,
-    handleRemovingAllFilters,
+    filters,
+    removeAllFilters,
     removeSelectedFilter,
   } = useContext(PlanetsContext);
 
@@ -84,12 +84,12 @@ function Table() {
       <button
         type="button"
         data-testid="button-remove-filters"
-        onClick={ handleRemovingAllFilters }
+        onClick={ removeAllFilters }
       >
         Remover todas filtragens
       </button>
 
-      {filter.reduce((acc, curr) => {
+      {filters.reduce((acc, curr) => {
         acc.push(
           <div data-testid="filter" key={ acc.length }>
             <span>{`${curr.column} ${curr.comparison} ${curr.amount}`}</span>
