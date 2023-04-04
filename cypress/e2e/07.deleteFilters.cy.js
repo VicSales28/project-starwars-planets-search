@@ -43,11 +43,11 @@ describe('7 - Apague um filtro de valor numérico ao clicar no ícone de X de um
     cy.addFilter('diameter', 'maior que', '8900');
     cy.addFilter('population', 'menor que', '1000000');
 
-    cy.get('table tr').should('have.length', DOUBLE_FILTERED);
+    cy.get('table tr').should('have.length', DOUBLE_FILTERED); //3
 
     removeFilter(POPULATION_FILTER_INDEX);
 
-    cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT);
+    cy.get('table tr').should('have.length', FILTERED_ROWS_COUNT); //8
 
     removeFilter(DIAMETER_FILTER_INDEX);
 

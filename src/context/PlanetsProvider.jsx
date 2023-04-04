@@ -86,27 +86,47 @@ function PlanetsProvider({ children }) {
 
     const newFilters = filter.filter((element) => element.column !== selectedFilter);
     setFilter(newFilters);
-    setOptions(options);
-    setColumn(options[0]);
 
-    let filteredPlanets = allPlanets;
+    if (newFilters.length === 0) {
+      setColumn('population');
+      setAmount('0');
+      setOptions(alternatives);
+      setPlanets(allPlanets);
+    } else {
+      newFilters.forEach((element) => {
+        if (element.comparison === 'maior que') {
+          const newData = allPlanets.filter(
+            (e) => +e[element.column] > +element.amount,
+          );
+          setOptions(options.filter((e) => e !== element.column));
+          setColumn(options[0]);
+          setAmount('0');
+          setPlanets(newData);
+        }
 
-    newFilters.forEach((e) => {
-      filteredPlanets = filteredPlanets.filter((planet) => {
-        switch (comparison) {
-        case 'maior que':
-          return parseInt(planet[e.column], 10) > parseInt(e.amount, 10);
-        case 'menor que':
-          return parseInt(planet[e.column], 10) < parseInt(e.amount, 10);
-        case 'igual a':
-          return parseInt(planet[e.column], 10) === parseInt(e.amount, 10);
-        default:
-          return false;
+        if (element.comparisonFilter === 'igual a') {
+          const newData = allPlanets.filter(
+            (e) => +e[element.column] === +element.amount,
+          );
+
+          setColumn(column.filter((e) => e !== element.column));
+          setColumn(options[0]);
+          setAmount('0');
+          setPlanets(newData);
+        }
+
+        if (element.comparison === 'menor que') {
+          const newData = allPlanets.filter(
+            (e) => +e[element.column] < +element.amount,
+          );
+
+          setOptions(column.filter((e) => e !== element.column));
+          setColumn(options[0]);
+          setAmount('0');
+          setPlanets(newData);
         }
       });
-    });
-
-    setPlanets(filteredPlanets);
+    }
   };
 
   // Definindo os dados que serão compartilhados para os componentes
