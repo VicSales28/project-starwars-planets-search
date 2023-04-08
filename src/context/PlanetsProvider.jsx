@@ -24,6 +24,9 @@ function PlanetsProvider({ children }) {
   const [amount, setAmount] = useState('0');
   const [options, setOptions] = useState(alternatives);
   const [filters, setFilters] = useState([]);
+  const [sortColumn, setSortColumn] = useState('population');
+  const [sortRadio, setSortRadio] = useState('');
+  const [order, setOrder] = useState({ order: { column: '', sort: '' } });
 
   // Atualizando o estado
   const getPlanets = async () => {
@@ -72,6 +75,8 @@ function PlanetsProvider({ children }) {
     setPlanets(filteredPlanets);
   };
 
+  // O objetivo da função abaixo é remover todos os filtros usados na tabela
+  // E retornar a tabela e os filtros para sua condição inicial
   const removeAllFilters = async () => {
     await getPlanets();
     setColumn('population');
@@ -81,19 +86,23 @@ function PlanetsProvider({ children }) {
   };
 
   const removeSelectedFilter = (selectedFilter) => {
+    // A seguir, o objetivo desse trecho de código é obter a posição exata de uma opção na seleção original
+    // E adicionar um filtro excluído de volta para as opções de escolha
     const index = alternatives.indexOf(selectedFilter);
     options.splice(index, 0, selectedFilter);
 
+    // Esse código é usado para remover os filtros excluídos do array com as opções de filtro selecionadas pelo usuário.
+    // Seu objetivo é atualizar os filtros novamente após a exclusão de um.
     const newFilters = filters.filter((element) => element.column !== selectedFilter);
     setFilters(newFilters);
 
-    if (newFilters.length === 0) {
+    if (newFilters.length === 0) { // Se não houver mais filtros selecionados, a tabela retorna para sua condição inicial
       setColumn('population');
       setAmount('0');
       setOptions(alternatives);
       setPlanets(allPlanets);
     } else {
-      newFilters.forEach((element) => {
+      newFilters.forEach((element) => { // Se houver filtros selecionados restantes, esse array é percorrido gerando uma nova tabela com base nos filtros restantes
         if (element.comparison === 'maior que') {
           const newData = allPlanets.filter(
             (e) => +e[element.column] > +element.amount,
@@ -129,6 +138,29 @@ function PlanetsProvider({ children }) {
     }
   };
 
+  // Essa função é usada para classificar os dados da tabela.
+  // A função recebe um objeto como parâmetro que contém informações sobre a coluna e a direção da classificação (ascendente ou descendente): obj = { order: { column: sortColumn, sort: sortRadio } }
+  // O valor bellow é usado para garantir que os elementos unknown sejam sempre enviados para o final da tabela.
+  const handleSorting = (obj) => {
+    setOrder(obj);
+    const below = -1;
+    const dataSort = [...planets];
+    if (obj.order.sort === 'DESC') {
+      dataSort.sort((a, b) => (
+        b[obj.order.column] === 'unknown'
+          ? below
+          : parseInt(b[obj.order.column], 10) - parseInt(a[obj.order.column], 10)
+      ));
+    } else if (obj.order.sort === 'ASC') {
+      dataSort.sort((a, b) => (
+        b[obj.order.column] === 'unknown'
+          ? below
+          : parseInt(a[obj.order.column], 10) - parseInt(b[obj.order.column], 10)
+      ));
+    }
+    setPlanets(dataSort);
+  };
+
   // Definindo os dados que serão compartilhados para os componentes
   const value = {
     planets,
@@ -145,6 +177,12 @@ function PlanetsProvider({ children }) {
     filters,
     removeAllFilters,
     removeSelectedFilter,
+    sortColumn,
+    sortRadio,
+    order,
+    setSortColumn,
+    setSortRadio,
+    handleSorting,
   };
 
   // Com esse retorno todos os componentes encapsulados pelo PlanetsContext.Provider terão acesso a esses dados

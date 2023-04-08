@@ -19,6 +19,11 @@ function Table() {
     filters,
     removeAllFilters,
     removeSelectedFilter,
+    handleSorting,
+    setSortColumn,
+    setSortRadio,
+    sortColumn,
+    sortRadio,
   } = useContext(PlanetsContext);
 
   // Convertendo o valor de entrada para minúsculas uma vez e armazenando em uma variável
@@ -101,6 +106,57 @@ function Table() {
         return acc;
       }, [])}
 
+      <div>
+        <select
+          id="sortColumn"
+          name="sortColumn"
+          value={ sortColumn }
+          data-testid="column-sort"
+          onChange={ ({ target }) => setSortColumn(target.value) }
+        >
+          <option value="population">population</option>
+          <option value="orbital_period">orbital_period</option>
+          <option value="diameter">diameter</option>
+          <option value="rotation_period">rotation_period</option>
+          <option value="surface_water">surface_water</option>
+        </select>
+
+        <label htmlFor="ASC">
+          Ascendente:
+          <input
+            id="ASC"
+            type="radio"
+            name="ORDER"
+            value="ASC"
+            data-testid="column-sort-input-asc"
+            onClick={ ({ target }) => setSortRadio(target.value) }
+          />
+        </label>
+
+        <label htmlFor="DESC">
+          Descendente:
+          <input
+            id="DESC"
+            type="radio"
+            name="ORDER"
+            value="DESC"
+            data-testid="column-sort-input-desc"
+            onClick={ ({ target }) => setSortRadio(target.value) }
+          />
+        </label>
+
+        <button
+          type="button"
+          data-testid="column-sort-button"
+          onClick={
+            () => handleSorting({ order: { column: sortColumn, sort: sortRadio } })
+          }
+        >
+          Ordenar
+        </button>
+
+      </div>
+
       <table>
 
         <thead>
@@ -124,9 +180,9 @@ function Table() {
         <tbody>
           {planets
             .filter(({ name }) => name.toLowerCase().includes(filterNameInput))
-            .map((planet) => (
-              <tr key={ planet.name }>
-                <td>{ planet.name }</td>
+            .map((planet, index) => (
+              <tr key={ index }>
+                <td data-testid="planet-name">{ planet.name }</td>
                 <td>{ planet.rotation_period }</td>
                 <td>{ planet.orbital_period }</td>
                 <td>{ planet.diameter }</td>
