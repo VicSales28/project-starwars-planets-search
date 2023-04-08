@@ -98,7 +98,11 @@ function Table() {
         acc.push(
           <div data-testid="filter" key={ acc.length }>
             <span>{`${curr.column} ${curr.comparison} ${curr.amount}`}</span>
-            <button type="button" onClick={ () => removeSelectedFilter(curr.column) }>
+            <button
+              type="button"
+              data-testid={ `remove-${curr.column}-filter-btn` }
+              onClick={ () => removeSelectedFilter(curr.column) }
+            >
               x
             </button>
           </div>,

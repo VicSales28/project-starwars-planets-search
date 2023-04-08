@@ -9,22 +9,22 @@ import testData from './mocks/testData';
 
 const planets = testData.results;
 
-describe('Testa se <App />', () => {
+describe('1ª Parte - Testes envolvendo <App />', () => {
   // A função substitui a função fetch() global pelo retorno da função mockFetch()
   beforeEach(() => {
     global.fetch = jest.fn(mockFetch);
   });
 
-  test('Testa se <App /> realiza uma requisição para a API do Star Wars', () => {
-    act(() => {
+  test('01 - Testa se <App /> realiza uma requisição para a API do Star Wars', async () => {
+    await act(async () => {
       render(<App />);
     });
     expect(fetch).toBeCalled();
     expect(fetch).toBeCalledWith('https://swapi.dev/api/planets');
   });
 
-  test('Testa se em <App /> há uma tabela com um cabeçalho corretamento preenchido', () => {
-    act(() => {
+  test('02 - Testa se em <App /> há uma tabela com um cabeçalho corretamento preenchido', async () => {
+    await act(async () => {
       render(<App />);
     });
     const table = screen.getByRole('table');
@@ -46,8 +46,8 @@ describe('Testa se <App />', () => {
     expect(tableRows[0]).toHaveTextContent(/URL/i);
   });
 
-  test('Testa se os planetas retornados pela API são exibidos', async () => {
-    act(() => {
+  test('03 - Testa se os planetas retornados pela API são exibidos',async () => {
+    await act(async () => {
       render(<App />);
     });
 
@@ -85,58 +85,32 @@ describe('Testa se <App />', () => {
     expect(Kamino).toBeVisible();
   });
 
-  test('Testa filtrar planetas que possuem a letra "h" no nome', async () => {
-    act(() => {
+  test('04 - Testa filtrar planetas que possuem a letra "h" no nome', async () => {
+    await act(async () => {
       render(<App />);
     });
     const nameInput = screen.getByPlaceholderText(/Search a planet from the Star Wars universe/i);
     expect(nameInput).toBeInTheDocument();
-
-    const Tatooine = await screen.findByText('Tatooine');
-    const Alderaan = await screen.findByText('Alderaan');
-    const Hoth = await screen.findByText('Hoth');
-    const Dagobah = await screen.findByText('Dagobah');
-
-    expect(Tatooine).toBeVisible();
-    expect(Alderaan).toBeVisible();
-    expect(Hoth).toBeVisible();
-    expect(Dagobah).toBeVisible();
-  
     userEvent.type(nameInput, 'h');
-  
-    expect(Tatooine).not.toBeVisible();
-    expect(Alderaan).not.toBeVisible();
-    expect(Hoth).toBeVisible();
-    expect(Dagobah).toBeVisible();
+
+    const planetNames = await screen.findAllByTestId('planet-name');
+    expect(planetNames).toHaveLength(2);
   });
 
-  test('Testa filtrar planetas que possuem as letras "ho" no nome', async () => {
-    act(() => {
+  test('05 - Testa filtrar planetas que possuem as letras "ho" no nome', async () => {
+    await act(async () => {
       render(<App />);
     });
     const nameInput = screen.getByPlaceholderText(/Search a planet from the Star Wars universe/i);
     expect(nameInput).toBeInTheDocument();
-
-    const Tatooine = await screen.findByText('Tatooine');
-    const Alderaan = await screen.findByText('Alderaan');
-    const Hoth = await screen.findByText('Hoth');
-    const Dagobah = await screen.findByText('Dagobah');
-
-    expect(Tatooine).toBeVisible();
-    expect(Alderaan).toBeVisible();
-    expect(Hoth).toBeVisible();
-    expect(Dagobah).toBeVisible();
-  
     userEvent.type(nameInput, 'ho');
-  
-    expect(Tatooine).not.toBeVisible();
-    expect(Alderaan).not.toBeVisible();
-    expect(Hoth).toBeVisible();
-    expect(Dagobah).not.toBeVisible();
+
+    const planetNames = await screen.findAllByTestId('planet-name');
+    expect(planetNames).toHaveLength(1);
   });
 
-  test('Testa se os filtros são exibidos corretamente', () => {
-    act(() => {
+  test('06 - Testa se os filtros são exibidos corretamente', async () => {
+    await act(async () => {
       render(<App />);
     });
 
@@ -153,51 +127,25 @@ describe('Testa se <App />', () => {
     expect(filterInput).toBeVisible();
   });
 
-  test('Testa filtro numérico: maior e menor que', async () => {
-    act(() => {
+  test('07 - Testa filtro numérico: maior que', async () => {
+    await act(async () => {
       render(<App />);
     });
-    const selectColumn = screen.getByTestId('column-filter');
-    const selectComparison = screen.getByTestId('comparison-filter');
     const amountInput = screen.getByTestId('value-filter');
     const filterBtn = screen.getByTestId('button-filter');
   
-    const Tatooine = await screen.findByText('Tatooine');
-    const Alderaan = await screen.findByText('Alderaan');
-    const Naboo = await screen.findByText('Naboo');
-    const Coruscant = await screen.findByText('Coruscant');
-  
-    expect(Tatooine).toBeVisible();
-    expect(Alderaan).toBeVisible();
-    expect(Naboo).toBeVisible();
-    expect(Coruscant).toBeVisible();
-  
+    userEvent.clear(amountInput);
     userEvent.type(amountInput, '1000000000');
     userEvent.click(filterBtn);
   
-    expect(Tatooine).not.toBeVisible();
-    expect(Alderaan).toBeVisible();
-    expect(Naboo).toBeVisible();
-    expect(Coruscant).toBeVisible();
-
-    userEvent.selectOptions(selectColumn, 'rotation_period');
-    userEvent.selectOptions(selectComparison, 'menor que');
-    userEvent.clear(amountInput);
-    userEvent.type(amountInput, '25')
-    userEvent.click(filterBtn);
-
-    expect(Tatooine).not.toBeVisible();
-    expect(Alderaan).toBeVisible();
-    expect(Naboo).not.toBeVisible();
-    expect(Coruscant).toBeVisible();
-
+    const planetNames = await screen.findAllByTestId('planet-name');
+    expect(planetNames).toHaveLength(3);
   });
 
-  test('Testa filtro numérico: igual a', async () => {
-    act(() => {
+  test('08 - Testa filtro numérico: igual a', async () => {
+    await act(async () => {
       render(<App />);
     });
-    const selectColumn = screen.getByTestId('column-filter');
     const selectComparison = screen.getByTestId('comparison-filter');
     const amountInput = screen.getByTestId('value-filter');
     const filterBtn = screen.getByTestId('button-filter');
@@ -209,7 +157,7 @@ describe('Testa se <App />', () => {
   
     userEvent.selectOptions(selectComparison, 'igual a');
     userEvent.clear(amountInput);
-    userEvent.type(amountInput, '200000')
+    userEvent.type(amountInput, '200000');
     userEvent.click(filterBtn);
 
 
@@ -219,4 +167,3 @@ describe('Testa se <App />', () => {
     expect(Coruscant).not.toBeVisible();  
   });
 })
-

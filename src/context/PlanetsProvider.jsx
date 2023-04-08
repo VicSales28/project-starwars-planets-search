@@ -13,7 +13,7 @@ const alternatives = [
 ];
 
 function PlanetsProvider({ children }) {
-  // useState permite que utilize o estado do React em componentes funcionais
+  // useState permite que utilize o estado do React
   const [planets, setPlanets] = useState([]);
   const [allPlanets, setAllPlanets] = useState([]);
   const [filterName, setfilterName] = useState({
@@ -28,14 +28,14 @@ function PlanetsProvider({ children }) {
   const [sortRadio, setSortRadio] = useState('');
   const [order, setOrder] = useState({ order: { column: '', sort: '' } });
 
-  // Atualizando o estado
+  // Atualiza estado para preencher a tabela
   const getPlanets = async () => {
     const data = await fetchPlanets('https://swapi.dev/api/planets');
     setPlanets(data.results);
     setAllPlanets(data.results);
   };
 
-  // A callback será executada similarmente ao componentDidMount, ou seja, rodando apenas uma vez
+  // Essa callback será executada similarmente ao componentDidMount, ou seja, roda apenas uma vez
   useEffect(() => {
     getPlanets();
   }, []);
@@ -86,9 +86,9 @@ function PlanetsProvider({ children }) {
   };
 
   const removeSelectedFilter = (selectedFilter) => {
-    // A seguir, o objetivo desse trecho de código é obter a posição exata de uma opção na seleção original
-    // E adicionar um filtro excluído de volta para as opções de escolha
+    // A seguir, o objetivo desse trecho é obter a posição exata de uma opção na seleção original
     const index = alternatives.indexOf(selectedFilter);
+    // A seguir, um filtro excluído retorna para as opções de escolha
     options.splice(index, 0, selectedFilter);
 
     // Esse código é usado para remover os filtros excluídos do array com as opções de filtro selecionadas pelo usuário.
