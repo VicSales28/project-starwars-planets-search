@@ -1,0 +1,9 @@
+.footer {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.footer p {
+  color: rgb(19, 20, 20);
+}

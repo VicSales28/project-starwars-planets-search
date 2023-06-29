@@ -1,0 +1,37 @@
+.container-table {
+  height: 100vh;
+  overflow: auto;
+  width: 100%;
+}
+
+table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+
+thead {
+  background-color: rgba(51, 36, 37, 0.792);
+  color: rgb(245, 245, 247);
+}
+
+th {
+  border-left: 1px solid rgb(117, 104, 121);
+  padding: 10px 5px;
+}
+
+th:nth-child( 1 ) {
+  border-left: none;
+  width: 180px;
+}
+
+td {
+  border-left: 1px solid rgb(212, 212, 212);
+  border-top: 1px solid rgb(212, 212, 212);
+  padding: 10px 5px;
+}
+
+td:nth-child( 1 ) {
+  border-left: none;
+}

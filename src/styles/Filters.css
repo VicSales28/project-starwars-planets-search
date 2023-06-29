@@ -1,0 +1,61 @@
+.container-filters {
+  align-items: center;
+  background-color: rgb(241, 241, 241);
+  border-radius: 0.35em;
+  box-shadow: 0 0.2em 0.35em rgba(119, 119, 119, 0.411);
+  box-sizing: border-box;
+  display: flex;
+  flex-flow: wrap;
+  flex-direction: column;
+  gap: 0.3em;
+  justify-content: space-around;
+  margin: 0 auto;
+  margin-bottom: 1.25em;
+  margin-top: -8em;
+  min-height: 10em;
+  padding: 1em;
+  width: 80%;
+}
+
+.container-filters-name input {
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 5px;
+  height: 2em;
+  margin-top: 0.3em;
+  padding: 0.6em;
+  text-indent: 0.5em;
+  width: 30em;
+}
+
+.container-filters-numeric {
+  display: flex;
+  gap: 1.2em;
+  text-align: center;
+}
+
+.container-filters-numeric input {
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 5px;
+  height: 2em;
+  margin-top: 0.3em;
+  padding: 0.6em;
+  width: 5em;
+}
+
+.container-filters select {
+  border: 1px solid rgb(219, 219, 219);
+  border-radius: 5px;
+  margin-top: 5px;
+  padding: 10px;
+}
+
+.container-filters button {
+  cursor: pointer;
+  padding: 10px;
+}
+
+.container-filters-order {
+  align-items: center;
+  display: flex;
+  gap: 1.2em;
+}

@@ -1,0 +1,20 @@
+header {
+  background-image: url('../assets/images/background.jpg');
+  background-size: cover;
+  height: 15em;
+}
+
+header h1 {
+  color: rgb(247, 245, 245);
+  top: 0;
+}
+
+.container-header {
+  align-items: center;
+  height: 100%;
+  margin: 0 auto;
+  padding-top: 1.25em;
+  text-align: center;
+  width: 80%;
+}
+
