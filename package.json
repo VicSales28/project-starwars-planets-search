@@ -2,7 +2,7 @@
   "name": "sd-0x-project-react-context-hooks-starwars-datatable-filters",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vicsales28.github.io/project-starwars-search-planets",
+  "homepage": "https://vicsales28.github.io/project-starwars-planets-search",
   "engines": {
     "node": "16 || 18"
   },
